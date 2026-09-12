@@ -1,17 +1,25 @@
-class Solution:
-    def countPrimes(self, n: int) -> int:
-        if n <= 2:
+class Solution(object):
+    def countPrimes(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        # Sieve of Eratosthenes
+
+        # We are only interested in numbers LESS than the input number
+        # exit early for numbers LESS than 2; (two is prime)
+        if n < 2:
             return 0
         
-        # Initialize a boolean array tracking primality
-        is_prime = [True] * n
-        is_prime[0] = is_prime[1] = False
+        # create strike list for the input range, initializing all indices to
+        # prime (1).
+        strikes = [1] * n
+
+        strikes[0] = 0
+        strikes[1] = 0
         
-        # Loop up to the square root of n
-        for i in range(2, int(n ** 0.5) + 1):
-            if is_prime[i]:
-                # Mark multiples of i starting from i * i as false
-                for j in range(i * i, n, i):
-                    is_prime[j] = False
-                    
-        return sum(is_prime)
+        for i in range(2, int(n**0.5)+1):
+            if  strikes[i] != 0:
+                strikes[i*i:n:i] = [0] * ((n-1-i*i)//i + 1)
+
+        return sum(strikes)
