@@ -1,13 +1,22 @@
 class Solution:
     def insert(self, intervals: list[list[int]], newInterval: list[int]) -> list[list[int]]:
-        intervals.append(newInterval)
-        intervals.sort(key=lambda x: x[0])
-        merged = []
+        n = len(intervals)
+        i = 0
+        res = []
 
-        for interval in intervals:
-            if not merged or merged[-1][1] < interval[0]:
-                merged.append(interval)
-            else:
-                merged[-1][1] = max(merged[-1][1], interval[1])
+        while i<n and intervals[i][1] < newInterval[0]:
+            res.append(intervals[i])
+            i+=1
+        
+        while i<n and intervals[i][0] <= newInterval[1]:
+            newInterval[0] = min(intervals[i][0], newInterval[0]) 
+            newInterval[1] = max(intervals[i][1], newInterval[1])       
+            i+=1
+        
+        res.append(newInterval)
 
-        return merged
+        while i<n:
+            res.append(intervals[i])
+            i+=1
+
+        return res
